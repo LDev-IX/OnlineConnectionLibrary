@@ -5,17 +5,14 @@ namespace OnlineConnectionLibrary
 {
     public class Server
     {
-        public int Port = 0;
-        public int QueuedConnectionsLimit = 0;
-        public Byte[] ReceivedData;
-        public void startOneToOne()
+        public void startOneToOne(Byte[] aReceivedData, int aPort = 0, int aQueuedConnectionsLimit = 0)
         {
             Socket S = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            S.Bind(new IPEndPoint(IPAddress.Any, Port));
-            S.Listen(QueuedConnectionsLimit);
+            S.Bind(new IPEndPoint(IPAddress.Any, aPort));
+            S.Listen(aQueuedConnectionsLimit);
             while (S.Connected)
             {
-                S.Receive(ReceivedData);
+                S.Receive(aReceivedData);
             }
         }
     }
