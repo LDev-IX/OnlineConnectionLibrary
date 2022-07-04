@@ -9,7 +9,7 @@ namespace OnlineConnectionLibrary
         public Socket[] SocketArray;
         public Socket ServerSocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         public int Port = 0;
-        public Byte[][] ReceiveBuffer;
+        public List<Byte[]> ReceiveBuffer;
         public void Start()
         {
             foreach(Socket fServerSocket in SocketArray)
@@ -17,6 +17,22 @@ namespace OnlineConnectionLibrary
                 fServerSocket.Bind(new IPEndPoint(IPAddress.Any, Port));
                 fServerSocket.Listen(0);
             }
+
+            while (true)
+            {
+                foreach(Socket fServerSocket in SocketArray)
+                {
+                    if (fServerSocket.Connected)
+                    {
+                        Receive(fServerSocket);
+                    }
+                }
+            }
+        }
+
+        public async void Receive(Socket aServerSocket)
+        {
+            await aServerSocket.ReceiveAsync(ReceiveBuffer[0], SocketFlags.None);
         }
     }
 }
