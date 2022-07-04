@@ -1,18 +1,21 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace OnlineConnectionLibrary
 {
     public class Server
     {
-        public void startOneToOne(Byte[] aReceivedData, int aPort = 0, int aQueuedConnectionsLimit = 0)
+        public Socket[] SocketArray;
+        public Socket ServerSocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        public int Port = 0;
+        public Byte[][] ReceiveBuffer;
+        public void Start()
         {
-            Socket S = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            S.Bind(new IPEndPoint(IPAddress.Any, aPort));
-            S.Listen(aQueuedConnectionsLimit);
-            while (S.Connected)
+            foreach(Socket fServerSocket in SocketArray)
             {
-                S.Receive(aReceivedData);
+                fServerSocket.Bind(new IPEndPoint(IPAddress.Any, Port));
+                fServerSocket.Listen(0);
             }
         }
     }
