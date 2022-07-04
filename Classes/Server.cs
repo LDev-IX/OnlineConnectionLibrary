@@ -17,22 +17,23 @@ namespace OnlineConnectionLibrary
                 fServerSocket.Bind(new IPEndPoint(IPAddress.Any, Port));
                 fServerSocket.Listen(0);
             }
+        }
 
+        public async void ReceiveFromAll()
+        {
+            int bufferIndex = 0;
             while (true)
             {
-                foreach(Socket fServerSocket in SocketArray)
+                bufferIndex = 0;
+                foreach (Socket fServerSocket in SocketArray)
                 {
                     if (fServerSocket.Connected)
                     {
-                        Receive(fServerSocket);
+                        await fServerSocket.ReceiveAsync(ReceiveBuffer[bufferIndex], SocketFlags.None);
                     }
+                    bufferIndex = bufferIndex + 1;
                 }
             }
-        }
-
-        public async void Receive(Socket aServerSocket)
-        {
-            await aServerSocket.ReceiveAsync(ReceiveBuffer[0], SocketFlags.None);
         }
     }
 }
