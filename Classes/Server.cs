@@ -35,5 +35,10 @@ namespace OnlineConnectionLibrary
                 }
             }
         }
+
+        public async void SendToAll(Byte[] aDataToSend)
+        {
+
+        }
     }
 }
